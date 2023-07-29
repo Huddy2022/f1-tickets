@@ -1,27 +1,86 @@
-{% load static %} 
+{% load static %}
 
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <title>F1 Tickets</title>
     <!--Favicon-->
-    <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}">
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="{% static 'images/favicon.ico' %}"
+    />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <meta name="Description" content="Enter your description here" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css"
+    <!-- Meta description -->
+    <meta
+      name="Description"
+      content="A website where users can by tickets to f1 events around the world"
     />
+    <!--Font awesome-->
+    <script
+      src="https://kit.fontawesome.com/62b6c595da.js"
+      crossorigin="anonymous"
+    ></script>
+    <!--Bootstrap CSS-->
     <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
       rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+      integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+      crossorigin="anonymous"
     />
-    <link rel="stylesheet" href="assets/css/style.css" />
-      </head>
+    <!--Google Fonts-->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Karla:wght@500&family=Merriweather:wght@300&display=swap"
+      rel="stylesheet"
+    />
+    <!--Link to CSS-->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+  </head>
   <body>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <!--Navigation-->
+    <div class="container">
+        <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top navbar bg-dark" data-bs-theme="dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="/home">F1 Tickets</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+                    aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                    <div class="navbar-nav">
+                        <a class="nav-link nav" aria-current="page" href="/home">Home</a>
+                        <a class="nav-link nav" href="/menu">Calender</a>
+                        <a class="nav-link nav" href="/book_a_table">Teams</a>
+                        <a class="nav-link nav" href="/gallery">Drivers</a>
+                        <a class="nav-link nav" href="#contact">Contact</a>
+                        {% if user.is_authenticated %}
+                        <a class="nav-link nav" href="#">Welcome {{ user.username }}</a>
+                        {% if not user.is_superuser %}
+                        <a class="nav-link nav" href="/reservations">My Orders</a>
+                        {% endif %}
+                        <a class="nav-link nav" href="{% url 'account_logout' %}">Logout</a>
+                        <a class="nav-link nav" href="{% url 'admin:index' %}">Admin
+                            User</a>
+                        {% else %}
+                        <a class="nav-link nav" href="{% url 'account_signup' %}">Sign Up</a>
+                        <a class="nav-link nav" href="{% url 'account_login' %}">Login</a>
+                        <a class="nav-link nav" href="{% url 'admin:index' %}">Admin
+                            User</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <!--Bootstrap JS-->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+      crossorigin="anonymous"
+    ></script>
   </body>
 </html>
