@@ -43,38 +43,54 @@
   <body>
     <!--Navigation-->
     <div class="container">
-        <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top navbar bg-dark" data-bs-theme="dark">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="/home">F1 Tickets</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
-                    aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-                    <div class="navbar-nav">
-                        <a class="nav-link nav" aria-current="page" href="/home">Home</a>
-                        <a class="nav-link nav" href="/menu">Calender</a>
-                        <a class="nav-link nav" href="/book_a_table">Teams</a>
-                        <a class="nav-link nav" href="/gallery">Drivers</a>
-                        <a class="nav-link nav" href="#contact">Contact</a>
-                        {% if user.is_authenticated %}
-                        <a class="nav-link nav" href="#">Welcome {{ user.username }}</a>
-                        {% if not user.is_superuser %}
-                        <a class="nav-link nav" href="/reservations">My Orders</a>
-                        {% endif %}
-                        <a class="nav-link nav" href="{% url 'account_logout' %}">Logout</a>
-                        <a class="nav-link nav" href="{% url 'admin:index' %}">Admin
-                            User</a>
-                        {% else %}
-                        <a class="nav-link nav" href="{% url 'account_signup' %}">Sign Up</a>
-                        <a class="nav-link nav" href="{% url 'account_login' %}">Login</a>
-                        <a class="nav-link nav" href="{% url 'admin:index' %}">Admin
-                            User</a>
-                        {% endif %}
-                    </div>
-                </div>
+      <nav
+        class="navbar navbar-expand-lg bg-body-tertiary fixed-top navbar bg-dark"
+        data-bs-theme="dark"
+      >
+        <div class="container-fluid">
+          <a class="navbar-brand" href="/home">F1 Tickets</a>
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarNavAltMarkup"
+            aria-controls="navbarNavAltMarkup"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+              <a class="nav-link nav" aria-current="page" href="/home">Home</a>
+              <a class="nav-link nav" href="/calendar">Calendar</a>
+              <a class="nav-link nav" href="/teams">Teams</a>
+              <a class="nav-link nav" href="/drivers">Drivers</a>
+              <a class="nav-link nav" href="/contact">Contact</a>
+              {% if user.is_authenticated %}
+              <a class="nav-link nav" href="#">Welcome {{ user.username }}</a>
+              {% if not user.is_superuser %}
+              <a class="nav-link nav" href="/reservations">My Orders</a>
+              {% endif %}
+              <a class="nav-link nav" href="{% url 'account_logout' %}"
+                >Logout</a
+              >
+              <a class="nav-link nav" href="{% url 'admin:index' %}"
+                >Admin User</a
+              >
+              {% else %}
+              <a class="nav-link nav" href="{% url 'account_signup' %}"
+                >Sign Up</a
+              >
+              <a class="nav-link nav" href="{% url 'account_login' %}">Login</a>
+              <a class="nav-link nav" href="{% url 'admin:index' %}"
+                >Admin User</a
+              >
+              {% endif %}
             </div>
-        </nav>
+          </div>
+        </div>
+      </nav>
     </div>
     <!--Bootstrap JS-->
     <script
@@ -82,5 +98,8 @@
       integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
       crossorigin="anonymous"
     ></script>
+    {% block content %}
+    <!--Content goes here-->
+    {% endblock content %}
   </body>
 </html>
