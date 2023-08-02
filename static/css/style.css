@@ -48,6 +48,13 @@ span {
     margin-top: 5px;
 }
 
+/* Calendar page */
+
+.calendar-heading {
+    margin-top: 100px;
+    text-decoration: underline;
+}
+
 /* Footer */
 
 .footer {
