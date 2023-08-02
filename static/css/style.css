@@ -30,6 +30,24 @@ span {
     color: #00D5FF;
 }
 
+/* Home page */
+
+.section-heading {
+    text-transform: uppercase;
+    margin-top: 10px;
+    text-decoration: underline;
+}
+
+.section-heading .section-heading-lower {
+    display: block;
+    margin-top: 5px;
+    text-decoration: underline;
+}
+
+.section-heading .section-heading-upper {
+    margin-top: 5px;
+}
+
 /* Footer */
 
 .footer {
