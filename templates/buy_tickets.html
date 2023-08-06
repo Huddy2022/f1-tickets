@@ -37,6 +37,25 @@
         </select>
       </td>
       <td>
+        <select name="quantity" class="form-select">
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
+            <option>5</option>
+            <option>6</option>
+            <option>7</option>
+            <option>8</option>
+            <option>9</option>
+            <option>10</option>
+
+        </select>
+      </td>
+    <td>Total Price:</td>
+    <td>
+        <strong><span id="total_price">£0</span></strong>
+    </td>
+      <td>
         {% if user.is_authenticated %}
         <button type="submit" class="btn btn-primary">Buy Tickets</button>
         {% endif %} {% if not user.is_authenticated %}
@@ -49,4 +68,43 @@
     </table>
   </form>
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const priceTable = {
+            'friday-general': 70,
+            'friday-grandstand': 150,
+            'saturday-general': 100,
+            'saturday-grandstand': 200,
+            'sunday-general': 120,
+            'sunday-grandstand': 250,
+            'all-general': 250,
+            'all-grandstand': 500,
+        };
+
+        function updateTotalPrice() {
+            const raceSelect = document.querySelector("select[name='race']");
+            const ticketTypeSelect = document.querySelector("select[name='ticket_type']");
+            const ticketCategorySelect = document.querySelector("select[name='ticket_category']");
+            const quantitySelect = document.querySelector("select[name='quantity']");
+            const totalPriceElement = document.getElementById("total_price");
+
+            const race = raceSelect.value;
+            const ticketType = ticketTypeSelect.value;
+            const ticketCategory = ticketCategorySelect.value;
+            const quantity = parseInt(quantitySelect.value);
+
+            const optionKey = `${ticketType}-${ticketCategory}`;
+            const price = priceTable[optionKey] || 0;
+            const total = price * quantity;
+
+            totalPriceElement.textContent = `£${total.toFixed(2)}`;
+        }
+
+        // Add event listeners to update the total price when the user selects different options
+        document.querySelector("select[name='race']").addEventListener("change", updateTotalPrice);
+        document.querySelector("select[name='ticket_type']").addEventListener("change", updateTotalPrice);
+        document.querySelector("select[name='ticket_category']").addEventListener("change", updateTotalPrice);
+        document.querySelector("select[name='quantity']").addEventListener("change", updateTotalPrice);
+    });
+</script>
 {% endblock %}

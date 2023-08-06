@@ -66,11 +66,10 @@
               <a class="nav-link nav" href="/calendar">Calendar</a>
               <a class="nav-link nav" href="/teams">Teams</a>
               <a class="nav-link nav" href="/drivers">Drivers</a>
-            <a class="nav-link nav" href="/buy_tickets">Buy Tickets</a>
+              <a class="nav-link nav" href="/buy_tickets">Buy Tickets</a>
               <a class="nav-link nav" href="#contact">Contact</a>
-              {% if user.is_authenticated %}
-              {% if not user.is_superuser %}
-              <a class="nav-link nav" href="/reservations">My Orders</a>
+              {% if user.is_authenticated %} {% if not user.is_superuser %}
+              <a class="nav-link nav" href="/my_orders">My Orders</a>
               {% endif %}
               <a class="nav-link nav" href="{% url 'account_logout' %}"
                 >Logout</a

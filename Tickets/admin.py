@@ -16,6 +16,6 @@ class CustomerAdmin(admin.ModelAdmin):
 @admin.register(Order)
 class BookingAdmin(admin.ModelAdmin):
     list_display = ('user', 'race', 'ticket_type', 'ticket_category',
-                    'quantity', 'order_date')
+                    'quantity', 'total_price', 'order_date')
     search_fields = ['user', 'race']
     list_filter = ('user', 'race')
