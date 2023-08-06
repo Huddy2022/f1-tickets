@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404
+from .models import Race, Order
 
 # Define index view
 
@@ -25,38 +26,18 @@ def drivers(request):
 
 def buy_tickets(request):
     if request.method == 'POST':
-        # Get the selected race, ticket type, and other details from the form
-        selected_race = request.POST.get('race')
-        selected_ticket_type = request.POST.get('ticket_type')
-        # You can add more form fields for other details like user information,
-        # payment method, etc.
+        races = Race.objects.all()
 
-        # Placeholder logic for handling the ticket purchase
-        # You can implement your actual ticket purchase logic here
-        # For now, we'll just print the selected options
-        print(f"Selected Race: {selected_race}")
-        print(f"Selected Ticket Type: {selected_ticket_type}")
+        # Get the race name from the query parameters if it exists
+        race_name = request.GET.get('race_name', None)
+        context = {
+            'races': races,
+            'default_race': race_name,  # Pass the race name as context variable
+        }
 
-        # After processing the purchase, you may redirect to a
-        # confirmation page
-        # For example, you can create a `confirmation` view function to
-        # handle this
-        # return redirect('confirmation')
+        return render(request, 'buy_tickets.html', context)
 
-    races = [
-        # List of dictionaries, each representing a race with its details
-        {
-            'name': 'Race 1',
-            'date': '2023-08-01',
-            'location': 'Sample Location',
-        },
-        # Add more races here
-    ]
-
-    context = {
-        'races': races,
-    }
-    return render(request, 'buy_tickets.html', context)
+    return render(request, 'buy_tickets.html')
 
 
 def contact(request):

@@ -8,11 +8,11 @@
         <table class="table table-bordered">
             <!-- ... Table content with race and ticket details ... -->
             <td>
-                <select name="race" class="form-select">
-                    {% for race in races %}
-                    <option value="{{ race.name }}">{{ race.name }}</option>
-                    {% endfor %}
-                </select>
+            <select name="race" class="form-select">
+                {% for race in races %}
+                <option value="{{ race.name }}" {% if race.name==default_race %}selected{% endif %}>{{ race.name }}</option>
+                {% endfor %}
+            </select>
             </td>
             <td>
                 <select name="ticket_type" class="form-select">
