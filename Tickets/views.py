@@ -23,5 +23,9 @@ def drivers(request):
     return render(request, 'drivers.html')
 
 
+def buy_tickets(request):
+    return render(request, 'buy_tickets.html')
+
+
 def contact(request):
     return render(request, 'contact.html')

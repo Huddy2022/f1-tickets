@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h1 class="display-4 text-center my-5">Choose Your Tickets</h1>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Race</th>
+                <th>Date</th>
+                <th>Location</th>
+                <th>Ticket Type</th>
+                <th>Options</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for race in races %}
+            <tr>
+                <td>{{ race.name }}</td>
+                <td>{{ race.date }}</td>
+                <td>{{ race.location }}</td>
+                <td>
+                    <select class="form-select">
+                        <option value="friday">Friday</option>
+                        <option value="saturday">Saturday</option>
+                        <option value="sunday">Sunday</option>
+                        <option value="all">All 3 Days</option>
+                    </select>
+                </td>
+                <td>
+                    <select class="form-select">
+                        <option value="general">General Admission</option>
+                        <option value="grandstand">Grandstand Seat</option>
+                    </select>
+                </td>
+                <td>
+                    <a href="#" class="btn btn-primary">Buy Tickets</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
