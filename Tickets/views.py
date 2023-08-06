@@ -37,7 +37,14 @@ def buy_tickets(request):
 
         return render(request, 'buy_tickets.html', context)
 
-    return render(request, 'buy_tickets.html')
+    races = Race.objects.all()
+    default_race = races.first() if races.exists() else None
+    context = {
+        'races': races,
+        'default_race': default_race,
+    }
+
+    return render(request, 'buy_tickets.html', context)
 
 
 def contact(request):
