@@ -55,6 +55,34 @@ span {
     text-decoration: underline;
 }
 
+/* Teams page */
+
+.teams-heading {
+    margin-top: 100px;
+    text-decoration: underline;
+}
+
+/* Drivers page */
+
+.drivers-heading {
+    margin-top: 100px;
+    text-decoration: underline;
+}
+
+/* Tickets page */
+
+.tickets-heading {
+    margin-top: 100px;
+    text-decoration: underline;
+}
+
+/* Orders page */
+
+.orders-heading {
+    margin-top: 100px;
+    text-decoration: underline;
+}
+
 /* Footer */
 
 .footer {
