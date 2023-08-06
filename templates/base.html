@@ -69,7 +69,6 @@
             <a class="nav-link nav" href="/buy_tickets">Buy Tickets</a>
               <a class="nav-link nav" href="#contact">Contact</a>
               {% if user.is_authenticated %}
-              <a class="nav-link nav" href="#">Welcome {{ user.username }}</a>
               {% if not user.is_superuser %}
               <a class="nav-link nav" href="/reservations">My Orders</a>
               {% endif %}
