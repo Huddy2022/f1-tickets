@@ -1,6 +1,6 @@
 {% extends "base.html" %} {% block content %}
-<div class="container">
-  <h1 class="display-4 text-center my-5 tickets-heading col">Choose Your Tickets</h1>
+<div class="container calendar-heading">
+  <h1 class="display-4 text-center my-5 col">Choose Your Tickets</h1>
   <form method="post">
     {% csrf_token %}
     <table class="table table-bordered">
