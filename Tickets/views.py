@@ -62,8 +62,12 @@ def buy_tickets(request):
             total_price=total_price,
         )
 
+    # Get all races and the default race based on the query parameters
     races = Race.objects.all()
-    default_race = races.first() if races.exists() else None
+    race_name = request.GET.get('race_name')
+    default_race = get_object_or_404(
+        Race, name=race_name) if race_name else races.first()
+
     context = {
         'races': races,
         'default_race': default_race,

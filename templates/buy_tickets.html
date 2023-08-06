@@ -7,19 +7,13 @@
       <!-- ... Table content with race and ticket details ... -->
       <td>
         <select name="race" class="form-select">
-          {% for race in races %}
-          <option
-            value="{{ race.name }}"
-            {%
-            if
-            race.name="default_race"
-            %}selected{%
-            endif
-            %}
-          >
-            {{ race.name }}
-          </option>
-          {% endfor %}
+            {% for race in races %}
+            {% if race.name == selected_race_name %}
+            <option value="{{ race.name }}" selected>{{ race.name }}</option>
+            {% else %}
+            <option value="{{ race.name }}">{{ race.name }}</option>
+            {% endif %}
+            {% endfor %}
         </select>
       </td>
       <td>
