@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from .models import Race, Order
 # Import login_required decorator
 from django.contrib.auth.decorators import login_required
@@ -50,6 +50,18 @@ def calendar(request):
             total_price=total_price,
         )
 
+        # Save the selected ticket information in session
+        basket_item = {
+            'race': race_name,
+            'ticket_type': ticket_type,
+            'ticket_category': ticket_category,
+            'quantity': quantity,
+            'total_price': total_price,
+        }
+        basket = request.session.get('basket', [])
+        basket.append(basket_item)
+        request.session['basket'] = basket
+
     # Get all races and the default race based on the query parameters
     races = Race.objects.all()
     race_name = request.GET.get('race_name')
@@ -85,3 +97,26 @@ def my_orders(request):
     }
 
     return render(request, 'my_orders.html', context)
+
+
+def basket(request):
+    basket_data = request.session.get('basket', [])
+
+    basket = [(index, item) for index, item in enumerate(basket_data)]
+
+    context = {
+        'basket': basket,
+    }
+
+    return render(request, 'basket.html', context)
+
+
+def remove_from_basket(request, index):
+    basket = request.session.get('basket', [])
+
+    if 0 <= index < len(basket):
+        # Remove the item at the specified index
+        removed_item = basket.pop(index)
+        request.session['basket'] = basket
+
+    return redirect('basket')

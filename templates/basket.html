@@ -1,0 +1,34 @@
+{% extends "base.html" %} {% block content %}
+<div class="calendar-heading container text-center">
+  <h1>Your Basket</h1>
+  <!-- Display selected tickets and provide options for editing -->
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Race</th>
+        <th>Day</th>
+        <th>Ticket Type</th>
+        <th>Quantity</th>
+        <th>Total Price</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for index, item in basket %}
+      <tr>
+        <td>{{ item.race }}</td>
+        <td>{{ item.ticket_type }}</td>
+        <td>{{ item.ticket_category }}</td>
+        <td>{{ item.quantity }}</td>
+        <td>£{{ item.total_price }}</td>
+        <td>
+          <a href="{% url 'remove_from_basket' index %}" class="btn btn-danger"
+            >Remove</a
+          >
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <a href="{% url 'calendar' %}" class="btn btn-primary">Add More Tickets</a>
+</div>
+{% endblock %}
