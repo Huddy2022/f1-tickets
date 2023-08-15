@@ -9,7 +9,6 @@ urlpatterns = [
     path('calendar', views.calendar, name='calendar'),
     path('teams', views.teams, name='teams'),
     path('drivers', views.drivers, name='drivers'),
-    path('buy_tickets', views.buy_tickets, name='buy_tickets'),
     path('my_orders', views.my_orders, name='my_orders'),
     path('contact', views.contact, name='contact'),
     path('admin/', admin.site.urls, name='admin'),

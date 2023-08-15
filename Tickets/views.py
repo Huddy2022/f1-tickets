@@ -15,18 +15,6 @@ def home(request):
 
 
 def calendar(request):
-    return render(request, 'calendar.html')
-
-
-def teams(request):
-    return render(request, 'teams.html')
-
-
-def drivers(request):
-    return render(request, 'drivers.html')
-
-
-def buy_tickets(request):
     ticket_prices = {
         'friday-general': 70,
         'friday-grandstand': 150,
@@ -72,8 +60,15 @@ def buy_tickets(request):
         'races': races,
         'default_race': default_race,
     }
+    return render(request, 'calendar.html', context)
 
-    return render(request, 'buy_tickets.html', context)
+
+def teams(request):
+    return render(request, 'teams.html')
+
+
+def drivers(request):
+    return render(request, 'drivers.html')
 
 
 def contact(request):
