@@ -30,5 +30,11 @@
     </tbody>
   </table>
   <a href="{% url 'calendar' %}" class="btn btn-primary">Add More Tickets</a>
+  <form method="post">
+    {% csrf_token %}
+    <input type="hidden" name="action" value="buy_tickets" />
+    <input type="hidden" name="race_id" value="{{ selected_race.id }}" />
+    <button type="submit" class="btn btn-primary">Buy Tickets</button>
+  </form>
 </div>
 {% endblock %}

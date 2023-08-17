@@ -311,6 +311,7 @@
     <h1 class="display-4 text-center my-5 col">Choose Your Tickets</h1>
     <form method="post">
         {% csrf_token %}
+        <input type="hidden" name="action" value="add_to_basket">
         <table class="table table-bordered">
             <!-- ... Table content with race and ticket details ... -->
             <td>
