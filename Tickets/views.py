@@ -120,6 +120,8 @@ def basket(request):
     if request.method == 'POST':
         action = request.POST.get('action')
 
+        print("Action:", action)  # Debug: Print the action value
+
         if action == 'add_to_basket':
             race_id = int(request.POST.get('race'))
             ticket_type = request.POST.get('ticket_type')
@@ -167,6 +169,8 @@ def basket(request):
                 ticket_type = item['ticket_type']
                 ticket_category = item['ticket_category']
                 quantity = item['quantity']
+                new_quantity = int(request.POST.get(
+                    f'basket[{index}][new_quantity_{index}]', 0))
                 total_price = item['total_price']
 
                 # Get the Race object based on the race name
@@ -178,7 +182,7 @@ def basket(request):
                     race=race,
                     ticket_type=ticket_type,
                     ticket_category=ticket_category,
-                    quantity=quantity,
+                    quantity=new_quantity,
                     total_price=total_price,
                 )
 

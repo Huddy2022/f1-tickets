@@ -10,21 +10,39 @@
         <th>Ticket Type</th>
         <th>Quantity</th>
         <th>Total Price</th>
+        <th>Action</th>
       </tr>
     </thead>
     <tbody>
       {% for index, item in basket %}
       <tr>
-        <td>{{ item.race }}</td>
-        <td>{{ item.ticket_type }}</td>
-        <td>{{ item.ticket_category }}</td>
-        <td>{{ item.quantity }}</td>
-        <td>£{{ item.total_price }}</td>
-        <td>
-          <a href="{% url 'remove_from_basket' index %}" class="btn btn-danger"
-            >Remove</a
-          >
-        </td>
+        <form method="post" action="{% url 'basket' %}">
+          <input type="hidden" name="index" value="{{ index }}" />
+          <td>{{ item.race }}</td>
+          <td>{{ item.ticket_type }}</td>
+          <td>{{ item.ticket_category }}</td>
+          <td>
+            <input
+              type="number"
+              name="new_quantity_{{ index }}"
+              class="form-control quantity-input"
+              value="{{ item.quantity }}"
+              min="1"
+              max="10"
+              data-index="{{ index }}"
+            />
+          </td>
+          <td class="total-price" data-index="{{ index }}">
+            £{{ item.total_price }}
+          </td>
+          <td>
+            <a
+              href="{% url 'remove_from_basket' index %}"
+              class="btn btn-danger"
+              >Remove</a
+            >
+          </td>
+        </form>
       </tr>
       {% endfor %}
     </tbody>
@@ -33,8 +51,96 @@
   <form method="post">
     {% csrf_token %}
     <input type="hidden" name="action" value="buy_tickets" />
-    <input type="hidden" name="race_id" value="{{ selected_race.id }}" />
+    <!-- Add a hidden input field for each item in the basket -->
+    {% for index, item in basket %}
+    <input
+      type="hidden"
+      name="basket[{{ index }}][quantity]"
+      value="{{ item.quantity }}"
+    />
+    <input
+      type="hidden"
+      name="basket[{{ index }}][new_quantity_{{ index }}]"
+      value="{{ item.quantity }}"
+    />
+    <input
+      type="hidden"
+      name="basket[{{ index }}][total_price]"
+      value="{{ item.total_price }}"
+    />
+    {% endfor %}
     <button type="submit" class="btn btn-primary">Buy Tickets</button>
   </form>
+  <div id="basket-data" style="display: none">
+    {{ basket|json_script:"basket-data" }}
+  </div>
+  <script>
+    const priceTable = {
+      "friday-general": 70,
+      "friday-grandstand": 150,
+      "saturday-general": 100,
+      "saturday-grandstand": 200,
+      "sunday-general": 120,
+      "sunday-grandstand": 250,
+      "all-general": 250,
+      "all-grandstand": 500,
+    };
+
+    const basketData = JSON.parse(
+      document.getElementById("basket-data").textContent
+    ).map((item, index) => ({
+      index: index,
+      race: item[1].race,
+      ticket_type: item[1].ticket_type,
+      ticket_category: item[1].ticket_category,
+      quantity: item[1].quantity,
+      total_price: item[1].total_price,
+    }));
+
+    function updateTotalPrice(event) {
+      const quantityInput = event.target;
+      const index = quantityInput.getAttribute("data-index");
+      console.log("Index:", index); // Check if index is correctly obtained
+      const item = basketData[index];
+      console.log("Item:", item); // Check if item is correctly obtained
+      const ticketType = item.ticket_type;
+      const ticketCategory = item.ticket_category;
+
+      const optionKey = `${ticketType}-${ticketCategory}`;
+      console.log("Option Key:", optionKey); // Check if optionKey is correctly constructed
+      const price = priceTable[optionKey] || 0;
+      console.log("Price:", price); // Check if price is correctly obtained
+      const quantity = parseInt(quantityInput.value);
+      console.log("Quantity:", quantity); // Check if quantity is correctly obtained
+      const total = price * quantity;
+
+      const totalCell = document.querySelector(
+        `.total-price[data-index="${index}"]`
+      );
+      console.log("Total Cell:", totalCell); // Check if totalCell is correctly obtained
+      totalCell.textContent = `£${total.toFixed(2)}`;
+    }
+
+    // Get all items in the basket and add event listeners to quantity inputs
+    document.querySelectorAll(".quantity-input").forEach((input) => {
+      input.addEventListener("input", updateTotalPrice);
+    });
+
+    // Calculate and update the total price initially
+    basketData.forEach((item, index) => {
+      const totalCell = document.querySelector(
+        `.total-price[data-index="${index}"]`
+      );
+      const ticketType = item.ticket_type;
+      const ticketCategory = item.ticket_category;
+
+      const optionKey = `${ticketType}-${ticketCategory}`;
+      const price = priceTable[optionKey] || 0;
+      const quantity = parseInt(item.quantity);
+      const total = price * quantity;
+
+      totalCell.textContent = `£${total.toFixed(2)}`;
+    });
+  </script>
 </div>
 {% endblock %}
