@@ -13,6 +13,8 @@ urlpatterns = [
     path('contact', views.contact, name='contact'),
     path('admin/', admin.site.urls, name='admin'),
     path('basket/', views.basket, name='basket'),
+    path('edit_basket_item/<int:index>/',
+         views.edit_basket_item, name='edit_basket_item'),
     path('remove_from_basket/<int:index>/',
          views.remove_from_basket, name='remove_from_basket'),
 ]

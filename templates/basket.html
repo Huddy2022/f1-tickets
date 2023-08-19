@@ -21,21 +21,14 @@
           <td>{{ item.race }}</td>
           <td>{{ item.ticket_type }}</td>
           <td>{{ item.ticket_category }}</td>
-          <td>
-            <input
-              type="number"
-              name="new_quantity_{{ index }}"
-              class="form-control quantity-input"
-              value="{{ item.quantity }}"
-              min="1"
-              max="10"
-              data-index="{{ index }}"
-            />
-          </td>
+          <td>{{ item.quantity }}</td>
           <td class="total-price" data-index="{{ index }}">
             £{{ item.total_price }}
           </td>
           <td>
+            <a href="{% url 'edit_basket_item' index %}" class="btn btn-primary"
+              >Edit</a
+            >
             <a
               href="{% url 'remove_from_basket' index %}"
               class="btn btn-danger"
@@ -100,24 +93,18 @@
     function updateTotalPrice(event) {
       const quantityInput = event.target;
       const index = quantityInput.getAttribute("data-index");
-      console.log("Index:", index); // Check if index is correctly obtained
       const item = basketData[index];
-      console.log("Item:", item); // Check if item is correctly obtained
       const ticketType = item.ticket_type;
       const ticketCategory = item.ticket_category;
 
       const optionKey = `${ticketType}-${ticketCategory}`;
-      console.log("Option Key:", optionKey); // Check if optionKey is correctly constructed
       const price = priceTable[optionKey] || 0;
-      console.log("Price:", price); // Check if price is correctly obtained
-      const quantity = parseInt(quantityInput.value);
-      console.log("Quantity:", quantity); // Check if quantity is correctly obtained
-      const total = price * quantity;
+      const newQuantity = parseInt(quantityInput.value); // Use updated quantity
+      const total = price * newQuantity; // Use updated quantity
 
       const totalCell = document.querySelector(
         `.total-price[data-index="${index}"]`
       );
-      console.log("Total Cell:", totalCell); // Check if totalCell is correctly obtained
       totalCell.textContent = `£${total.toFixed(2)}`;
     }
 

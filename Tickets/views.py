@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Race, Order
+from django.http import JsonResponse
 # Import login_required decorator
 from django.contrib.auth.decorators import login_required
 
@@ -77,6 +78,8 @@ def calendar(request):
         basket.append(basket_item)
         request.session['basket'] = basket
 
+        return redirect('basket')
+
     # Get all races and the default race based on the query parameters
     races = Race.objects.all()
     race_name = request.GET.get('race_name')
@@ -119,8 +122,6 @@ def basket(request):
 
     if request.method == 'POST':
         action = request.POST.get('action')
-
-        print("Action:", action)  # Debug: Print the action value
 
         if action == 'add_to_basket':
             race_id = int(request.POST.get('race'))
@@ -169,8 +170,6 @@ def basket(request):
                 ticket_type = item['ticket_type']
                 ticket_category = item['ticket_category']
                 quantity = item['quantity']
-                new_quantity = int(request.POST.get(
-                    f'basket[{index}][new_quantity_{index}]', 0))
                 total_price = item['total_price']
 
                 # Get the Race object based on the race name
@@ -182,7 +181,7 @@ def basket(request):
                     race=race,
                     ticket_type=ticket_type,
                     ticket_category=ticket_category,
-                    quantity=new_quantity,
+                    quantity=quantity,
                     total_price=total_price,
                 )
 
@@ -199,6 +198,62 @@ def basket(request):
     }
 
     return render(request, 'basket.html', context)
+
+
+@login_required
+def edit_basket_item(request, index):
+    basket_data = request.session.get('basket', [])
+
+    if 0 <= index < len(basket_data):
+        item = basket_data[index]
+        original_order = item.copy()
+
+        if request.method == 'POST':
+            # Get the form data from request.POST
+            race_name = request.POST.get('race')
+            ticket_type = request.POST.get('ticket_type')
+            ticket_category = request.POST.get('ticket_category')
+            quantity = request.POST.get('quantity')
+
+            # Remove the original order from the basket
+            basket_data.remove(original_order)
+
+            # Get the Race object based on the selected race name
+            race = Race.objects.get(name=race_name)
+
+            # Calculate the total price based on the selected options
+            option_key = f"{ticket_type}-{ticket_category}"
+            total_price = ticket_prices.get(option_key, 0) * int(quantity)
+
+            # Save the selected ticket information in session
+            basket_item = {
+                'race': race_name,
+                'ticket_type': ticket_type,
+                'ticket_category': ticket_category,
+                'quantity': quantity,
+                'total_price': total_price,
+            }
+            basket = request.session.get('basket', [])
+            basket.append(basket_item)
+            request.session['basket'] = basket
+
+            return redirect('basket')
+
+    # Get all races and the default race based on the query parameters
+    races = Race.objects.all()
+    selected_race_name = request.GET.get('race_name', '')
+    default_race = get_object_or_404(
+        Race, name=selected_race_name) if selected_race_name else races.first()
+
+    context = {
+        'basket': basket_data,
+        'original_order': original_order,
+        'races': races,
+        'selected_race_name': selected_race_name,
+        'item_index': index,
+    }
+
+    return render(request, 'edit_basket_item.html', context)
 
 
 def remove_from_basket(request, index):
