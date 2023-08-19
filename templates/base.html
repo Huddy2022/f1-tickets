@@ -85,7 +85,12 @@
                 >Admin User</a
               >
               {% endif %}
-              <a class="nav-link nav" href="/basket">Basket</a>
+              <a class="nav-link nav" href="/basket">
+                <i class="fas fa-shopping-basket"></i> Basket
+                <span class="badge bg-secondary"
+                  >{{ request.session.basket|length }}</span
+                >
+              </a>
             </div>
           </div>
         </div>
