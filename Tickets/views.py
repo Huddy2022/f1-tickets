@@ -1,8 +1,17 @@
+import stripe
+from django.conf import settings
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Race, Order
 from django.http import JsonResponse
+from django.views import View
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
+from decimal import Decimal
 # Import login_required decorator
 from django.contrib.auth.decorators import login_required
+
+
+stripe.api_key = settings.STRIPE_SECRET_KEY
 
 # Dictionary to map race names to their IDs
 race_name_to_id = {
@@ -41,6 +50,41 @@ ticket_prices = {
     'all-general': 250,
     'all-grandstand': 500,
 }
+
+
+class CreateCheckoutSessionView(View):
+    @method_decorator(csrf_exempt)
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        basket_data = request.session.get('basket', [])
+        total_price = sum(item['total_price'] for item in basket_data)
+        YOUR_DOMAIN = "https://8000-huddy2022-f1-tickets-gllzk9garf.us2.codeanyapp.com"
+
+        # Convert total_price to the smallest unit of the currency
+        total_price_in_cents = int(total_price * 100)
+
+        checkout_session = stripe.checkout.Session.create(
+            payment_method_types=['card'],
+            line_items=[
+                {
+                    'price_data': {
+                        'currency': 'gbp',
+                        'unit_amount': total_price_in_cents,
+                        'product_data': {
+                            'name': 'F1 Tickets',
+                        },
+                    },
+                    'quantity': 1,
+                },
+            ],
+            mode='payment',
+            success_url=YOUR_DOMAIN + '/my_orders',
+            cancel_url=YOUR_DOMAIN + '/basket/',
+        )
+
+        return JsonResponse({'id': checkout_session.id})
 
 
 def index(request):
@@ -175,6 +219,9 @@ def basket(request):
                 # Get the Race object based on the race name
                 race = Race.objects.get(name=race_name)
 
+                # Generate a unique order ID
+                # order_id = generate_unique_order_id()
+
                 # Create and save the Order object
                 Order.objects.create(
                     user=request.user,
@@ -195,6 +242,7 @@ def basket(request):
     context = {
         'basket': basket,
         'race_name_to_id': race_name_to_id,
+        "STRIPE_PUBLIC_KEY": settings.STRIPE_PUBLIC_KEY,
     }
 
     return render(request, 'basket.html', context)

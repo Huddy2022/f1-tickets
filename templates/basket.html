@@ -62,12 +62,48 @@
       value="{{ item.total_price }}"
     />
     {% endfor %}
-    <button type="submit" class="btn btn-primary">Buy Tickets</button>
+    <button type="button" class="btn btn-primary" id="checkout-button" data-order-id="{{ item.order_id }}" data-public-key="{{ STRIPE_PUBLIC_KEY }}"> Buy Tickets
   </form>
   <div id="basket-data" style="display: none">
     {{ basket|json_script:"basket-data" }}
   </div>
-  <script>
+  {% csrf_token %}
+  <script type="text/javascript">
+    const csrftoken = document.querySelector("[name=csrfmiddlewaretoken]").value;
+        var stripe = Stripe(document.getElementById("checkout-button").getAttribute("data-public-key"));
+
+        var checkoutButton = document.getElementById("checkout-button");
+        checkoutButton.addEventListener("click", function () {
+            // Get the order_id from the data attribute
+            const order_id = checkoutButton.getAttribute("data-order-id");
+
+            // Rest of your code to create a checkout session
+            fetch("{% url 'create-checkout-session' %}", {
+                method: "POST", // You were missing this line
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": csrftoken,
+                },
+                body: JSON.stringify({
+                    order_id: order_id,
+                }),
+            })
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (session) {
+                    return stripe.redirectToCheckout({ sessionId: session.id });
+                })
+                .then(function (result) {
+                    if (result.error) {
+                        alert(result.error.message);
+                    }
+                })
+                .catch(function (error) {
+                    console.error("Error:", error);
+                });
+        });
+
     const priceTable = {
       "friday-general": 70,
       "friday-grandstand": 150,
