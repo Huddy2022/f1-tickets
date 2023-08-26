@@ -59,26 +59,27 @@ class CreateCheckoutSessionView(View):
 
     def post(self, request, *args, **kwargs):
         basket_data = request.session.get('basket', [])
-        total_price = sum(item['total_price'] for item in basket_data)
         YOUR_DOMAIN = "https://8000-huddy2022-f1-tickets-gllzk9garf.us2.codeanyapp.com"
 
-        # Convert total_price to the smallest unit of the currency
-        total_price_in_cents = int(total_price * 100)
+        line_items = []
+
+        # Create and save the Order objects
+        created_orders = []
+        for item in basket_data:
+            line_items.append({
+                'price_data': {
+                    'currency': 'gbp',
+                    'unit_amount': int(item['total_price'] * 100),
+                    'product_data': {
+                        'name': f"{item['race']} - {item['ticket_type']} ({item['ticket_category']}) x{item['quantity']}",
+                    },
+                },
+                'quantity': 1,
+            })
 
         checkout_session = stripe.checkout.Session.create(
             payment_method_types=['card'],
-            line_items=[
-                {
-                    'price_data': {
-                        'currency': 'gbp',
-                        'unit_amount': total_price_in_cents,
-                        'product_data': {
-                            'name': 'F1 Tickets',
-                        },
-                    },
-                    'quantity': 1,
-                },
-            ],
+            line_items=line_items,
             mode='payment',
             success_url=YOUR_DOMAIN + '/my_orders',
             cancel_url=YOUR_DOMAIN + '/basket/',
@@ -218,9 +219,6 @@ def basket(request):
 
                 # Get the Race object based on the race name
                 race = Race.objects.get(name=race_name)
-
-                # Generate a unique order ID
-                # order_id = generate_unique_order_id()
 
                 # Create and save the Order object
                 Order.objects.create(
