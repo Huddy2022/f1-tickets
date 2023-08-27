@@ -17,4 +17,5 @@ urlpatterns = [
          views.edit_basket_item, name='edit_basket_item'),
     path('remove_from_basket/<int:index>/',
          views.remove_from_basket, name='remove_from_basket'),
+    path('checkout_success', views.checkout_success, name='checkout_success'),
 ]

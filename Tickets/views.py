@@ -81,11 +81,24 @@ class CreateCheckoutSessionView(View):
             payment_method_types=['card'],
             line_items=line_items,
             mode='payment',
-            success_url=YOUR_DOMAIN + '/my_orders',
+            success_url=YOUR_DOMAIN + '/checkout_success',
             cancel_url=YOUR_DOMAIN + '/basket/',
         )
 
+        # Save the session ID to the user's session to identify successful payment
+        request.session['checkout_session_id'] = checkout_session.id
+
         return JsonResponse({'id': checkout_session.id})
+
+
+def checkout_success(request):
+    checkout_session_id = request.session.get('checkout_session_id')
+    if checkout_session_id:
+        # Clear the user's basket after successful payment
+        request.session.pop('basket', None)
+        request.session.pop('checkout_session_id', None)
+
+    return redirect('my_orders')
 
 
 def index(request):
