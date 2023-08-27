@@ -88,68 +88,6 @@
                         console.error("Error:", error);
                     });
             });
-
-
-        const priceTable = {
-            "friday-general": 70,
-            "friday-grandstand": 150,
-            "saturday-general": 100,
-            "saturday-grandstand": 200,
-            "sunday-general": 120,
-            "sunday-grandstand": 250,
-            "all-general": 250,
-            "all-grandstand": 500,
-        };
-
-        const basketData = JSON.parse(
-            document.getElementById("basket-data").textContent
-        ).map((item, index) => ({
-            index: index,
-            race: item[1].race,
-            ticket_type: item[1].ticket_type,
-            ticket_category: item[1].ticket_category,
-            quantity: item[1].quantity,
-            total_price: item[1].total_price,
-        }));
-
-        function updateTotalPrice(event) {
-            const quantityInput = event.target;
-            const index = quantityInput.getAttribute("data-index");
-            const item = basketData[index];
-            const ticketType = item.ticket_type;
-            const ticketCategory = item.ticket_category;
-
-            const optionKey = `${ticketType}-${ticketCategory}`;
-            const price = priceTable[optionKey] || 0;
-            const newQuantity = parseInt(quantityInput.value); // Use updated quantity
-            const total = price * newQuantity; // Use updated quantity
-
-            const totalCell = document.querySelector(
-                `.total-price[data-index="${index}"]`
-            );
-            totalCell.textContent = `£${total.toFixed(2)}`;
-        }
-
-        // Get all items in the basket and add event listeners to quantity inputs
-        document.querySelectorAll(".quantity-input").forEach((input) => {
-            input.addEventListener("input", updateTotalPrice);
-        });
-
-        // Calculate and update the total price initially
-        basketData.forEach((item, index) => {
-            const totalCell = document.querySelector(
-                `.total-price[data-index="${index}"]`
-            );
-            const ticketType = item.ticket_type;
-            const ticketCategory = item.ticket_category;
-
-            const optionKey = `${ticketType}-${ticketCategory}`;
-            const price = priceTable[optionKey] || 0;
-            const quantity = parseInt(item.quantity);
-            const total = price * quantity;
-
-            totalCell.textContent = `£${total.toFixed(2)}`;
-        });
     </script>
 </div>
 {% endblock %}
