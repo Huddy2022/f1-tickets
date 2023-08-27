@@ -24,6 +24,11 @@
         <td>{{ order.get_ticket_category_display }}</td>
         <td>{{ order.quantity }}</td>
         <td>£{{ order.total_price }}</td>
+        <td
+          class="{% if order.paid %}text-success{% else %}text-danger{% endif %}"
+        >
+          {% if order.paid %}Paid{% else %}Unpaid{% endif %}
+        </td>
       </tr>
       {% endfor %}
     </tbody>

@@ -36,5 +36,8 @@ class Order(models.Model):
     # Add the total_price field
     total_price = models.IntegerField(default=0)  # cents
 
+    # Add new field to track payment status
+    paid = models.BooleanField(default=False)
+
     def __str__(self):
-        return f"{self.user.username} - {self.race.name}"
+        return f"{self.user.username} - {self.race.name} - {self.ticket_type} ({self.ticket_category})"

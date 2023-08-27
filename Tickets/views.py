@@ -63,19 +63,42 @@ class CreateCheckoutSessionView(View):
 
         line_items = []
 
-        # Create and save the Order objects
         created_orders = []
         for item in basket_data:
+            # Extract item details
+            race_name = item['race']
+            ticket_type = item['ticket_type']
+            ticket_category = item['ticket_category']
+            quantity = item['quantity']
+            total_price = item['total_price']
+
+            # Retrieve the Race instance based on the race_name
+            race = Race.objects.get(name=race_name)
+
             line_items.append({
                 'price_data': {
                     'currency': 'gbp',
-                    'unit_amount': int(item['total_price'] * 100),
+                    'unit_amount': int(total_price * 100),
                     'product_data': {
-                        'name': f"{item['race']} - {item['ticket_type']} ({item['ticket_category']}) x{item['quantity']}",
+                        'name': f"{race_name} - {ticket_type} ({ticket_category}) x{quantity}",
                     },
                 },
                 'quantity': 1,
             })
+
+            # Create and save the Order objects
+            order = Order.objects.create(
+                user=request.user,
+                race=race,  # Use the retrieved Race instance
+                ticket_type=ticket_type,
+                ticket_category=ticket_category,
+                quantity=quantity,
+                total_price=total_price,
+            )
+            created_orders.append(order)
+
+            # Store the order ID in the session
+            request.session['paid_order_id'] = order.id
 
         checkout_session = stripe.checkout.Session.create(
             payment_method_types=['card'],
@@ -85,18 +108,22 @@ class CreateCheckoutSessionView(View):
             cancel_url=YOUR_DOMAIN + '/basket/',
         )
 
-        # Save the session ID to the user's session to identify successful payment
         request.session['checkout_session_id'] = checkout_session.id
 
         return JsonResponse({'id': checkout_session.id})
 
 
 def checkout_success(request):
-    checkout_session_id = request.session.get('checkout_session_id')
-    if checkout_session_id:
-        # Clear the user's basket after successful payment
+    paid_order_id = request.session.get('paid_order_id')
+    if paid_order_id:
+        # Mark the order as paid using the order ID
+        order = Order.objects.get(id=paid_order_id)
+        order.paid = True
+        order.save()
+
+        # Clear the user's basket and paid_order_id after successful payment
         request.session.pop('basket', None)
-        request.session.pop('checkout_session_id', None)
+        request.session.pop('paid_order_id', None)
 
     return redirect('my_orders')
 
@@ -132,6 +159,7 @@ def calendar(request):
             'quantity': quantity,
             'total_price': total_price,
         }
+
         basket = request.session.get('basket', [])
         basket.append(basket_item)
         request.session['basket'] = basket
@@ -171,6 +199,8 @@ def my_orders(request):
     context = {
         'orders': orders,
     }
+
+    print(context)
 
     return render(request, 'my_orders.html', context)
 
@@ -274,29 +304,40 @@ def edit_basket_item(request, index):
             ticket_category = request.POST.get('ticket_category')
             quantity = request.POST.get('quantity')
 
-            # Remove the original order from the basket
-            basket_data.remove(original_order)
+            # Find the original order in the database
+            try:
+                order_to_edit = Order.objects.get(
+                    user=request.user,
+                    race__name=original_order['race'],
+                    ticket_type=original_order['ticket_type'],
+                    ticket_category=original_order['ticket_category'],
+                    quantity=original_order['quantity'],
+                    total_price=original_order['total_price']
+                )
 
-            # Get the Race object based on the selected race name
-            race = Race.objects.get(name=race_name)
+                # Update the order's fields with the new values
+                order_to_edit.race = Race.objects.get(name=race_name)
+                order_to_edit.ticket_type = ticket_type
+                order_to_edit.ticket_category = ticket_category
+                order_to_edit.quantity = quantity
+                order_to_edit.total_price = ticket_prices.get(
+                    f"{ticket_type}-{ticket_category}", 0) * int(quantity)
+                order_to_edit.save()
 
-            # Calculate the total price based on the selected options
-            option_key = f"{ticket_type}-{ticket_category}"
-            total_price = ticket_prices.get(option_key, 0) * int(quantity)
+                # Update the basket item in session
+                basket_data[index] = {
+                    'race': race_name,
+                    'ticket_type': ticket_type,
+                    'ticket_category': ticket_category,
+                    'quantity': quantity,
+                    'total_price': order_to_edit.total_price,
+                }
+                request.session['basket'] = basket_data
 
-            # Save the selected ticket information in session
-            basket_item = {
-                'race': race_name,
-                'ticket_type': ticket_type,
-                'ticket_category': ticket_category,
-                'quantity': quantity,
-                'total_price': total_price,
-            }
-            basket = request.session.get('basket', [])
-            basket.append(basket_item)
-            request.session['basket'] = basket
-
-            return redirect('basket')
+                return redirect('basket')
+            except Order.DoesNotExist:
+                # Handle the case where the order doesn't exist (optional)
+                pass
 
     # Get all races and the default race based on the query parameters
     races = Race.objects.all()
@@ -319,8 +360,30 @@ def remove_from_basket(request, index):
     basket = request.session.get('basket', [])
 
     if 0 <= index < len(basket):
-        # Remove the item at the specified index
+        # Get the removed item
         removed_item = basket.pop(index)
         request.session['basket'] = basket
+
+        # Get the corresponding order's ID from the removed item
+        order_race = removed_item['race']
+        order_ticket_type = removed_item['ticket_type']
+        order_ticket_category = removed_item['ticket_category']
+        order_quantity = removed_item['quantity']
+        order_total_price = removed_item['total_price']
+
+        # Find and delete the corresponding order from the database
+        try:
+            order_to_delete = Order.objects.get(
+                user=request.user,
+                race__name=order_race,
+                ticket_type=order_ticket_type,
+                ticket_category=order_ticket_category,
+                quantity=order_quantity,
+                total_price=order_total_price
+            )
+            order_to_delete.delete()
+        except Order.DoesNotExist:
+            # Handle the case where the order doesn't exist (optional)
+            pass
 
     return redirect('basket')

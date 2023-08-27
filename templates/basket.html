@@ -58,36 +58,37 @@
         var stripe = Stripe(document.getElementById("checkout-button").getAttribute("data-public-key"));
 
         var checkoutButton = document.getElementById("checkout-button");
-        checkoutButton.addEventListener("click", function () {
-            // Get the order_id from the data attribute
-            const order_id = checkoutButton.getAttribute("data-order-id");
+            checkoutButton.addEventListener("click", function () {
+                // Get the order_id from the data attribute
+                const order_id = checkoutButton.getAttribute("data-order-id");
 
-            // Rest of your code to create a checkout session
-            fetch("{% url 'create-checkout-session' %}", {
-                method: "POST", // You were missing this line
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRFToken": csrftoken,
-                },
-                body: JSON.stringify({
-                    order_id: order_id,
-                }),
-            })
-                .then(function (response) {
-                    return response.json();
+                // Rest of your code to create a checkout session
+                fetch("{% url 'create-checkout-session' %}", {
+                    method: "POST", // You were missing this line
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": csrftoken,
+                    },
+                    body: JSON.stringify({
+                        order_id: order_id,
+                    }),
                 })
-                .then(function (session) {
-                    return stripe.redirectToCheckout({ sessionId: session.id });
-                })
-                .then(function (result) {
-                    if (result.error) {
-                        alert(result.error.message);
-                    }
-                })
-                .catch(function (error) {
-                    console.error("Error:", error);
-                });
-        });
+                    .then(function (response) {
+                        return response.json();
+                    })
+                    .then(function (session) {
+                        return stripe.redirectToCheckout({ sessionId: session.id });
+                    })
+                    .then(function (result) {
+                        if (result.error) {
+                            alert(result.error.message);
+                        }
+                    })
+                    .catch(function (error) {
+                        console.error("Error:", error);
+                    });
+            });
+
 
         const priceTable = {
             "friday-general": 70,
@@ -152,3 +153,4 @@
     </script>
 </div>
 {% endblock %}
+
