@@ -34,7 +34,7 @@
             {% endfor %}
         </tbody>
     </table>
-    <a href="{% url 'calendar' %}" class="btn btn-primary">Add More Tickets</a>
+    <a href="{% url 'calendar' %}" class="btn btn-primary mb-3">Add More Tickets</a>
     <form method="post">
         {% csrf_token %}
         <input type="hidden" name="action" value="buy_tickets" />

@@ -50,7 +50,6 @@ span {
 
 #main_image {
     margin-top: 100px;
-    /* Adjust as needed */
     text-align: center;
 }
 
@@ -66,7 +65,6 @@ span {
 
 .about-us {
     margin-top: 50px;
-    /* Adjust as needed */
 }
 
 .about-text {
@@ -82,11 +80,52 @@ span {
     text-decoration: underline;
 }
 
+.team-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
 /* Calendar page */
 
 .calendar-heading {
     margin-top: 100px;
     text-decoration: underline;
+}
+
+.btn-buy-tickets {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #ff6600;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.race-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.race-details {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.7);
+    /* Background color for the details box */
+    color: #ffffff;
+    padding: 15px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.race-card:hover .race-details {
+    opacity: 1;
 }
 
 /* Footer */
