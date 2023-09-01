@@ -26,15 +26,15 @@
                         £{{ item.total_price }}
                     </td>
                     <td>
-                        <a href="{% url 'edit_basket_item' index %}" class="btn btn-primary">Edit</a>
-                        <a href="{% url 'remove_from_basket' index %}" class="btn btn-danger">Remove</a>
+                        <a href="{% url 'edit_basket_item' index %}" class="btn btn-primary btn-edit-tickets">Edit</a>
+                        <a href="{% url 'remove_from_basket' index %}" class="btn btn-danger btn-remove-tickets">Remove</a>
                     </td>
                 </form>
             </tr>
             {% endfor %}
         </tbody>
     </table>
-    <a href="{% url 'calendar' %}" class="btn btn-primary mb-3">Add More Tickets</a>
+    <a href="{% url 'calendar' %}" class="btn btn-primary btn-buy-tickets mb-3">Add More Tickets</a>
     <form method="post">
         {% csrf_token %}
         <input type="hidden" name="action" value="buy_tickets" />
@@ -46,7 +46,7 @@
         <input type="hidden" name="basket[{{ index }}][quantity]" value="{{ item.quantity }}" />
         <input type="hidden" name="basket[{{ index }}][total_price]" value="{{ item.total_price }}" />
         {% endfor %}
-        <button type="button" class="btn btn-primary" id="checkout-button" data-order-id="{{ item.order_id }}"
+        <button type="button" class="btn btn-primary btn-buy-tickets" id="checkout-button" data-order-id="{{ item.order_id }}"
             data-public-key="{{ STRIPE_PUBLIC_KEY }}"> Buy Tickets
     </form>
     <div id="basket-data" style="display: none">

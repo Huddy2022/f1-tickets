@@ -456,11 +456,11 @@
             </td>
             <td>
                 {% if user.is_authenticated %}
-                <button type="submit" class="btn btn-primary">Add to basket</button>
+                <button type="submit" class="btn btn-primary btn-buy-tickets">Add to basket</button>
                 {% endif %} {% if not user.is_authenticated %}
                 <strong>Attention: </strong>You need to be signed in to book tickets.
-                <a class="btn blue-button" href="{% url 'account_signup' %}"><strong>Sign Up</strong></a>
-                <a class="btn blue-button" href="{% url 'account_login' %}"><strong>Login</strong></a>
+                <a class="btn btn-primary btn-buy-tickets" href="{% url 'account_signup' %}"><strong>Sign Up</strong></a>
+                <a class="btn btn-primary btn-buy-tickets" href="{% url 'account_login' %}"><strong>Login</strong></a>
                 </a>
                 {% endif %}
             </td>

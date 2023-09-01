@@ -63,6 +63,8 @@ class CreateCheckoutSessionView(View):
             "us2.codeanyapp.com"
         )
 
+        created_order_ids = request.session.get('created_orders', [])
+
         line_items = []
 
         created_orders = []
@@ -100,8 +102,16 @@ class CreateCheckoutSessionView(View):
             )
             created_orders.append(order)
 
-            # Store the order ID in the session
-            request.session['paid_order_id'] = order.id
+        # Clear previously created orders and their IDs
+        for order_id in created_order_ids:
+            try:
+                order = Order.objects.get(id=order_id)
+                order.delete()
+            except Order.DoesNotExist:
+                pass
+
+        # Update session to reflect the cleared created orders
+        request.session['created_orders'] = []
 
         checkout_session = stripe.checkout.Session.create(
             payment_method_types=['card'],
@@ -112,21 +122,21 @@ class CreateCheckoutSessionView(View):
         )
 
         request.session['checkout_session_id'] = checkout_session.id
+        request.session['created_orders'] = [o.id for o in created_orders]
 
         return JsonResponse({'id': checkout_session.id})
 
 
 def checkout_success(request):
-    paid_order_id = request.session.get('paid_order_id')
-    if paid_order_id:
-        # Mark the order as paid using the order ID
-        order = Order.objects.get(id=paid_order_id)
-        order.paid = True
-        order.save()
+    created_order_ids = request.session.get('created_orders', [])
 
-        # Clear the user's basket and paid_order_id after successful payment
+    if created_order_ids:
+        # Mark all created orders as paid
+        Order.objects.filter(id__in=created_order_ids).update(paid=True)
+
+        # Clear the user's basket and created_orders after successful payment
         request.session.pop('basket', None)
-        request.session.pop('paid_order_id', None)
+        request.session.pop('created_orders', None)
 
     return redirect('my_orders')
 
@@ -223,6 +233,7 @@ def basket(request):
 @login_required
 def edit_basket_item(request, index):
     basket_data = request.session.get('basket', [])
+    created_order_ids = request.session.get('created_orders', [])
 
     if 0 <= index < len(basket_data):
         item = basket_data[index]
@@ -257,6 +268,21 @@ def edit_basket_item(request, index):
             basket.append(basket_item)
             request.session['basket'] = basket
 
+            # Update the order associated with the index in created_orders
+            if 0 <= index < len(created_order_ids):
+                order_id = created_order_ids[index]
+                try:
+                    order = Order.objects.get(id=order_id)
+                    # Update the order with the new information
+                    order.race = Race.objects.get(name=race_name)
+                    order.ticket_type = ticket_type
+                    order.ticket_category = ticket_category
+                    order.quantity = quantity
+                    order.total_price = total_price
+                    order.save()
+                except Order.DoesNotExist:
+                    pass
+
             return redirect('basket')
 
     # Get all races and the default race based on the query parameters
@@ -277,11 +303,26 @@ def edit_basket_item(request, index):
 
 
 def remove_from_basket(request, index):
-    basket = request.session.get('basket', [])
+    basket_data = request.session.get('basket', [])
+    created_order_ids = request.session.get('created_orders', [])
 
-    if 0 <= index < len(basket):
+    if 0 <= index < len(basket_data):
         # Remove the item at the specified index
-        removed_item = basket.pop(index)
-        request.session['basket'] = basket
+        removed_item = basket_data.pop(index)
+        request.session['basket'] = basket_data
+
+        # Remove the associated order from the database and created_orders
+        if 0 <= index < len(created_order_ids):
+            order_id = created_order_ids[index]
+            try:
+                order = Order.objects.get(id=order_id)
+                order.delete()
+                # Remove the order ID from created_orders
+                created_order_ids.pop(index)
+                # Update session
+                request.session['created_orders'] = created_order_ids
+
+            except Order.DoesNotExist:
+                pass
 
     return redirect('basket')
