@@ -25,7 +25,7 @@
         <table class="table table-bordered">
             <!-- ... Table content with race and ticket details ... -->
             <td>
-                <select name="race" class="form-select">
+                <select name="race" class="form-select" required>
                     <option value="">Select a race</option>
                     {% for race in races %}
                     {% if race.name == selected_race_name %}
@@ -37,7 +37,7 @@
                 </select>
             </td>
             <td>
-                <select name="ticket_type" class="form-select">
+                <select name="ticket_type" class="form-select" required>
                     <option value="">Select a Day</option>
                     <option value="friday">Friday</option>
                     <option value="saturday">Saturday</option>
@@ -46,7 +46,7 @@
                 </select>
             </td>
             <td>
-                <select name="ticket_category" class="form-select">
+                <select name="ticket_category" class="form-select" required>
                     <option value="">Select a ticket</option>
                     <option value="general">General Admission</option>
                     <option value="grandstand">Grandstand Seat</option>

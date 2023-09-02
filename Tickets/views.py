@@ -230,7 +230,6 @@ def basket(request):
     return render(request, 'basket.html', context)
 
 
-@login_required
 def edit_basket_item(request, index):
     basket_data = request.session.get('basket', [])
     created_order_ids = request.session.get('created_orders', [])
@@ -244,53 +243,73 @@ def edit_basket_item(request, index):
             race_name = request.POST.get('race')
             ticket_type = request.POST.get('ticket_type')
             ticket_category = request.POST.get('ticket_category')
-            quantity = request.POST.get('quantity')
-
-            # Remove the original order from the basket
-            basket_data.remove(original_order)
-
-            # Get the Race object based on the selected race name
-            race = Race.objects.get(name=race_name)
+            # Ensure quantity is an integer
+            quantity = int(request.POST.get('quantity'))
 
             # Calculate the total price based on the selected options
             option_key = f"{ticket_type}-{ticket_category}"
-            total_price = ticket_prices.get(option_key, 0) * int(quantity)
+            total_price = ticket_prices.get(option_key, 0) * quantity
 
-            # Save the selected ticket information in session
-            basket_item = {
-                'race': race_name,
-                'ticket_type': ticket_type,
-                'ticket_category': ticket_category,
-                'quantity': quantity,
-                'total_price': total_price,
-            }
-            basket = request.session.get('basket', [])
-            basket.append(basket_item)
-            request.session['basket'] = basket
-
-            # Update the order associated with the index in created_orders
+            # Get the original order ID from created_order_ids
             if 0 <= index < len(created_order_ids):
                 order_id = created_order_ids[index]
+
                 try:
                     order = Order.objects.get(id=order_id)
+
                     # Update the order with the new information
                     order.race = Race.objects.get(name=race_name)
                     order.ticket_type = ticket_type
                     order.ticket_category = ticket_category
                     order.quantity = quantity
-                    order.total_price = total_price
-                    order.save()
+                    order.total_price = total_price  # Update the total_price
+
+                    # Update the original_order with the edited data
+                    original_order = {
+                        'race': race_name,
+                        'ticket_type': ticket_type,
+                        'ticket_category': ticket_category,
+                        'quantity': quantity,
+                        'total_price': total_price,
+                    }
+
+                    # Update the basket_data with the edited order
+                    basket_data[index] = original_order
+                    request.session['basket'] = basket_data
+
+                    order.save()  # Save the order with updated total_price
                 except Order.DoesNotExist:
                     pass
 
-            return redirect('basket')
+            else:
+                # Remove the original order from the basket
+                basket_data.remove(original_order)
 
+                # Get the Race object based on the selected race name
+                race = Race.objects.get(name=race_name)
+
+                # Calculate the total price based on the selected options
+                option_key = f"{ticket_type}-{ticket_category}"
+                total_price = ticket_prices.get(option_key, 0) * int(quantity)
+
+                # Save the selected ticket information in session
+                basket_item = {
+                    'race': race_name,
+                    'ticket_type': ticket_type,
+                    'ticket_category': ticket_category,
+                    'quantity': quantity,
+                    'total_price': total_price,
+                }
+                basket = request.session.get('basket', [])
+                basket.append(basket_item)
+                request.session['basket'] = basket
+
+            return redirect('basket')
     # Get all races and the default race based on the query parameters
     races = Race.objects.all()
     selected_race_name = request.GET.get('race_name', '')
     default_race = get_object_or_404(
         Race, name=selected_race_name) if selected_race_name else races.first()
-
     context = {
         'basket': basket_data,
         'original_order': original_order,
@@ -298,7 +317,6 @@ def edit_basket_item(request, index):
         'selected_race_name': selected_race_name,
         'item_index': index,
     }
-
     return render(request, 'edit_basket_item.html', context)
 
 

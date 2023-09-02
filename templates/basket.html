@@ -46,8 +46,10 @@
         <input type="hidden" name="basket[{{ index }}][quantity]" value="{{ item.quantity }}" />
         <input type="hidden" name="basket[{{ index }}][total_price]" value="{{ item.total_price }}" />
         {% endfor %}
+        {% if basket %}
         <button type="button" class="btn btn-primary btn-buy-tickets" id="checkout-button" data-order-id="{{ item.order_id }}"
             data-public-key="{{ STRIPE_PUBLIC_KEY }}"> Buy Tickets
+        {% endif %}
     </form>
     <div id="basket-data" style="display: none">
         {{ basket|json_script:"basket-data" }}
