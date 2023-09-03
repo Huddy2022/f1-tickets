@@ -301,3 +301,76 @@ span {
 .home-nav:hover {
     color: #00d5ff;
 }
+
+/* Responsive */
+
+@media (max-width: 991px) {
+    .nav-link {
+        color: black;
+        background-color: white;
+        display: inline-block;
+        padding: 5px 10px;
+    }
+
+    .nav-link.nav {
+        width: 150px;
+    }
+
+    .footer-nav {
+        color: white;
+        background-color: #000000;
+    }
+}
+
+
+@media (max-width: 1400px) {
+    .driver-image {
+        max-width: 100%;
+        height: auto;
+    }
+
+}
+
+@media (max-width: 600px) {
+    .team-row {
+        margin-bottom: 20px;
+    }
+
+    .team-container {
+        text-align: center;
+    }
+
+    .team-image {
+        max-width: 100%;
+        height: auto;
+    }
+
+}
+
+@media (max-width: 550px) {
+    .table {
+        font-size: 14px;
+        margin: 10px 0;
+        border-collapse: collapse;
+    }
+
+    .table th,
+    .table td {
+        padding: 6px 10px;
+    }
+
+}
+
+@media (max-width: 400px) {
+    .table {
+        font-size: 10px;
+        margin: 10px 0;
+        border-collapse: collapse;
+    }
+
+    .table th,
+    .table td {
+        padding: 2px 5px;
+    }
+
+}
