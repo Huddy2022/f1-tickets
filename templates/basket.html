@@ -2,6 +2,7 @@
 <div class="calendar-heading container text-center">
     <h1>Your Basket</h1>
     <!-- Display selected tickets and provide options for editing -->
+    <div class="table-responsive">
     <table class="table table-bordered">
         <thead>
             <tr>
@@ -26,15 +27,16 @@
                         £{{ item.total_price }}
                     </td>
                     <td>
-                        <a href="{% url 'edit_basket_item' index %}" class="btn btn-primary btn-edit-tickets">Edit</a>
-                        <a href="{% url 'remove_from_basket' index %}" class="btn btn-danger btn-remove-tickets">Remove</a>
+                        <a href="{% url 'edit_basket_item' index %}" class="btn btn-primary btn-edit-tickets btn-small">Edit</a>
+                        <a href="{% url 'remove_from_basket' index %}" class="btn btn-danger btn-remove-tickets btn-small">Remove</a>
                     </td>
                 </form>
             </tr>
             {% endfor %}
         </tbody>
     </table>
-    <a href="{% url 'calendar' %}" class="btn btn-primary btn-buy-tickets mb-3">Add More Tickets</a>
+    </div>
+    <a href="{% url 'calendar' %}" class="btn btn-primary btn-buy-tickets mb-3 btn-small">Add More Tickets</a>
     <form method="post">
         {% csrf_token %}
         <input type="hidden" name="action" value="buy_tickets" />
@@ -47,7 +49,7 @@
         <input type="hidden" name="basket[{{ index }}][total_price]" value="{{ item.total_price }}" />
         {% endfor %}
         {% if basket %}
-        <button type="button" class="btn btn-primary btn-buy-tickets" id="checkout-button" data-order-id="{{ item.order_id }}"
+        <button type="button" class="btn btn-primary btn-buy-tickets btn-small" id="checkout-button" data-order-id="{{ item.order_id }}"
             data-public-key="{{ STRIPE_PUBLIC_KEY }}"> Buy Tickets
         {% endif %}
     </form>

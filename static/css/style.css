@@ -361,6 +361,13 @@ span {
 
 }
 
+@media (max-width: 475px) {
+    .btn-small {
+        padding: 8px 16px;
+        font-size: 14px;
+    }
+}
+
 @media (max-width: 400px) {
     .table {
         font-size: 10px;
