@@ -363,8 +363,13 @@ span {
 
 @media (max-width: 475px) {
     .btn-small {
-        padding: 8px 16px;
-        font-size: 14px;
+        padding: 4px 8px;
+        font-size: 8px;
+    }
+
+    .calendar-heading {
+        padding-left: 6px;
+        padding-right: 6px;
     }
 }
 
