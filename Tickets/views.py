@@ -59,8 +59,7 @@ class CreateCheckoutSessionView(View):
     def post(self, request, *args, **kwargs):
         basket_data = request.session.get('basket', [])
         YOUR_DOMAIN = (
-            "https://8000-huddy2022-f1-tickets-gllzk9garf."
-            "us2.codeanyapp.com"
+            "https://f1-tickets-e355687b93ca.herokuapp.com/"
         )
 
         created_order_ids = request.session.get('created_orders', [])
