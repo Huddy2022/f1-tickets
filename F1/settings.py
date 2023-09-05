@@ -89,9 +89,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'F1.wsgi.application'
 
-
 # Database
-# https://docs.djangoproject.com/en/3.2/ref/settings/#databases
+# https: // docs.djangoproject.com/en/3.2/ref/settings/  # databases
 
 # DATABASES = {
 #     'default': {
@@ -102,6 +101,7 @@ WSGI_APPLICATION = 'F1.wsgi.application'
 
 DATABASES = {
     'default': dj_database_url.parse(os.environ.get("DATABASE_URL"))
+
 }
 
 # Password validation
