@@ -142,3 +142,5 @@ Follow us - Allows the user to follow us on social media sites such as Facebook 
 * Authorisation is needed to add tickets - which helps the manager/super user to manage all orders & customers.
 * When signed in any user will have a my orders tab in the navigation, so they can see what orders if any they have.
 * I have put ACCOUNT_EMAIL_VERIFICATION = 'none' so that login and registration should work without errors regardless of whether you use an email address to sign in/up.
+
+## My orders
