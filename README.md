@@ -62,7 +62,7 @@ The "Admin User" tab grants convenient access for the super user to log in and o
   * Admin User
   * Basket (shows number of items in basket)
 
-![Navigation](https://codeinstitute.s3.amazonaws.com/fullstack/ci_logo_small.png)
+![Navigation](https://github.com/Huddy2022/f1-tickets/blob/main/assets/images/navigation.jpg)
 
 * Footer
 
@@ -71,7 +71,7 @@ The "Admin User" tab grants convenient access for the super user to log in and o
   * Contact - is for the user to contact the website if they have any queries (the contact tab on navigation links to this footer contact section).
 Follow us - Allows the user to follow us on social media sites such as Facebook and Instagram.
 
-![Footer](https://codeinstitute.s3.amazonaws.com/fullstack/ci_logo_small.png)
+![Footer](https://github.com/Huddy2022/f1-tickets/blob/main/assets/images/footer.jpg)
 
 ### Home
 
@@ -81,7 +81,7 @@ Follow us - Allows the user to follow us on social media sites such as Facebook 
 
   * The main image of the website showcases an immersive view of an F1 race, capturing the excitement and energy of a Formula 1 event. This image effectively conveys the essence of the website, providing visitors with a visual introduction to the thrilling world of Formula 1 racing.
 
-![Home](https://codeinstitute.s3.amazonaws.com/fullstack/ci_logo_small.png)
+![Home](https://github.com/Huddy2022/f1-tickets/blob/main/assets/images/home.jpg)
 
 * About us
 
@@ -91,7 +91,7 @@ Follow us - Allows the user to follow us on social media sites such as Facebook 
   * It complements the narrative with an engaging image for a visually appealing experience.
   * The "About Us" section sets the stage for visitors to understand the thrilling world of Formula 1 and the excitement offered by F1 Tickets.
 
-![About Us](https://codeinstitute.s3.amazonaws.com/fullstack/ci_logo_small.png)
+![About Us](https://github.com/Huddy2022/f1-tickets/blob/main/assets/images/about%20us.jpg)
 
 ## Calendar
 
@@ -105,9 +105,9 @@ Follow us - Allows the user to follow us on social media sites such as Facebook 
 * To complete the purchase, users can click a "Add Tickets" button, which redirects them to the basket.
 * The "Add Tickets" section streamlines the ticket-buying experience, making it convenient for users to secure their spots at Formula 1 events directly from the calendar page.
 
-![Calendar](https://codeinstitute.s3.amazonaws.com/fullstack/ci_logo_small.png)
+![Calendar](https://github.com/Huddy2022/f1-tickets/blob/main/assets/images/calendar.jpg)
 
-![Calendar add basket](https://codeinstitute.s3.amazonaws.com/fullstack/ci_logo_small.png)
+![Calendar add basket](https://github.com/Huddy2022/f1-tickets/blob/main/assets/images/calendar%20add%20basket.jpg)
 
 ## Teams
 
@@ -118,7 +118,7 @@ Follow us - Allows the user to follow us on social media sites such as Facebook 
 * Users can explore the different teams, gaining insights into their competitive records in Formula 1.
 * The "Team" page serves as a valuable resource for Formula 1 enthusiasts who want to learn more about their favorite teams.
 
-![Teams](https://codeinstitute.s3.amazonaws.com/fullstack/ci_logo_small.png)
+![Teams](https://github.com/Huddy2022/f1-tickets/blob/main/assets/images/teams.jpg)
 
 ## Drivers
 
@@ -129,13 +129,13 @@ Follow us - Allows the user to follow us on social media sites such as Facebook 
 * Users can explore the unique profiles of Formula 1 drivers, getting to know their backgrounds and accomplishments.
 * The "Drivers" page serves as a comprehensive guide for fans who want to keep track of their favorite drivers throughout the season.
 
-![Drivers](https://codeinstitute.s3.amazonaws.com/fullstack/ci_logo_small.png)
+![Drivers](https://github.com/Huddy2022/f1-tickets/blob/main/assets/images/drivers.jpg)
 
 ## Contact
 
 * The contact navigation tab is linked to the contact details shown on the footer, so whenever a user selects this tab it will take them to the bottom of any page showing the contact details for the restaurant.
 
-![Contact](https://codeinstitute.s3.amazonaws.com/fullstack/ci_logo_small.png)
+![Contact](https://github.com/Huddy2022/f1-tickets/blob/main/assets/images/footer.jpg)
 
 ## Sign up / Login
 
@@ -145,9 +145,9 @@ Follow us - Allows the user to follow us on social media sites such as Facebook 
 * When signed in any user will have a my orders tab in the navigation, so they can see what orders if any they have.
 * I have put ACCOUNT_EMAIL_VERIFICATION = 'none' so that login and registration should work without errors regardless of whether you use an email address to sign in/up.
 
-![Sign up](https://codeinstitute.s3.amazonaws.com/fullstack/ci_logo_small.png)
+![Sign up](https://github.com/Huddy2022/f1-tickets/blob/main/assets/images/sign%20up.jpg)
 
-![Login](https://codeinstitute.s3.amazonaws.com/fullstack/ci_logo_small.png)
+![Login](https://github.com/Huddy2022/f1-tickets/blob/main/assets/images/log%20in.jpg)
 
 ## Basket
 
@@ -196,7 +196,7 @@ A CSRF token is used to protect against cross-site request forgery.
 JavaScript is used to interact with the Stripe API, create a checkout session, and handle the redirection to the Stripe checkout page.
 This page allows users to review and manage the tickets they have selected for purchase before proceeding with the payment process.
 
-![Basket](https://codeinstitute.s3.amazonaws.com/fullstack/ci_logo_small.png)
+![Basket](https://github.com/Huddy2022/f1-tickets/blob/main/assets/images/basket.jpg)
 
 ## Edit Basket
 
@@ -238,7 +238,7 @@ JavaScript is used to dynamically update the total price based on the selected o
 Event listeners are added to each option (race, ticket type, ticket category, quantity) to trigger price updates.
 This page provides a user-friendly interface for modifying ticket details, ensuring users have the flexibility to adjust their selections before proceeding with the purchase.
 
-![Edit Basket](https://codeinstitute.s3.amazonaws.com/fullstack/ci_logo_small.png)
+![Edit Basket](https://github.com/Huddy2022/f1-tickets/blob/main/assets/images/edit%20basket.jpg)
 
 ## My orders
 
@@ -272,7 +272,7 @@ If the user has no previous orders, a message is displayed indicating, "You have
 The payment status column dynamically changes text color to green for "Paid" and red for "Unpaid" orders.
 This page serves as a record of the user's past orders, allowing them to review the details of each order, including payment status, for their reference.
 
-![My Orders](https://codeinstitute.s3.amazonaws.com/fullstack/ci_logo_small.png)
+![My Orders](https://github.com/Huddy2022/f1-tickets/blob/main/assets/images/my%20orders.jpg)
 
 ## Admin User
 
