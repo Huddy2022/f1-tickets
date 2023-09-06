@@ -1,6 +1,6 @@
-## F1 Tickets
+# F1 Tickets
 
-The Live link can be found here - https://f1-tickets-e355687b93ca.herokuapp.com/
+The Live link can be found here - <https://f1-tickets-e355687b93ca.herokuapp.com/>
 
 The F1 Tickets website offers an online ticket booking platform for Formula 1 racing events. It provides users with a seamless navigation experience, including sections like home, calendar, teams, drivers, contact, and user authentication for sign in/log in (and when logged in, there's an option to sign out and access a personalized reservations page in the navigation). The site is designed to cater to racing enthusiasts and individuals interested in attending Formula 1 races. Visitors can explore upcoming races and learn about the sport. To book tickets, users are encouraged to become members, granting them access to exclusive features. Membership benefits include a reservations page where users can review and manage their bookings, including the option to cancel or modify existing reservations. This ensures a convenient and tailored experience for F1 fans.
 
